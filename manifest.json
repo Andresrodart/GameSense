@@ -1,0 +1,7 @@
+{
+  "name": "game-sense",
+  "short_name": "game-sense",
+  "description": "Feel the game",
+  "start_url": "/",
+  "display": "standalone"
+}
