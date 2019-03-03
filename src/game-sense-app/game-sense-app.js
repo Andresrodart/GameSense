@@ -30,6 +30,8 @@ class GameSenseApp extends PolymerElement {
                         <div id="answer-button-container">
                             <paper-input always-float-label label="Gamer" id="Gname"></paper-input>
                             <paper-input always-float-label label="Edad"  id="Gage" type="number"></paper-input>
+                            <paper-input always-float-label label="Estatura"  id="Ghi" type="number" step="0.01"></paper-input>
+                            <paper-input always-float-label label="Peso"  id="Ghi" type="number" step="0.01" placeholder="70.00"></paper-input>
                             <paper-button id="optionA" class="answer" on-click="_selectAnswer">[[cA]]</paper-button>
                         </div>
                     <paper-button class="another" id="another" on-click="_changeImage">[[cB]]</paper-button> 
