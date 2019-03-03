@@ -4,8 +4,10 @@ import '@polymer/app-layout/app-layout.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-ajax/iron-ajax.js';
-var url = 'http://localhost:3000/users';
+import '@vaadin/vaadin-charts/vaadin-chart.js';
 
+const url = 'http://localhost:3000/users';
+const arrCat = Array.apply(null, {length: 199}).map(Number.call, Number)
 /**
  * @customElement
  * @polymer
@@ -60,21 +62,57 @@ class GameSenseApp extends PolymerElement {
                   </div>
                 </div>
               </div>  
-            <div id="answer-button-container">
-              <paper-input always-float-label label="Gamer"></paper-input>
-              <paper-input always-float-label label="Edad"></paper-input>
+              <div id="timer" class="">
+                <vaadin-chart type="area" title="What A gamer A Gamer feel" categories="[[categories]]" stacking="normal" no-legend tooltip>
+                  <vaadin-chart-series title="Channel A" values="[[channelA]]" unit="Houndreds">
+                  </vaadin-chart-series>
+                  <vaadin-chart-series title="Channel B" values="[[channelB]]" unit="Houndreds">
+                  </vaadin-chart-series>
+                  <vaadin-chart-series title="Channel C" values="[[channelC]]" unit="Houndreds">
+                  </vaadin-chart-series>
+                </vaadin-chart>
             </div>
             <br>
             <paper-button class="another" id="another" on-click="_exit" >Exit</paper-button> 
           </div>
         </div>
-       
+        <iron-ajax
+          id="ajax"
+          url="[[url2]]"
+          handle-as="text"
+          on-response="_handleResponse"
+
+        </iron-ajax>
       </app-header-layout>
     
     `;
   }
   static get properties() {
     return {
+      darwi:{
+        type: Boolean,
+        value: false
+      },
+      categories:{
+        type: Array,
+        value: arrCat
+      },
+      channelA:{
+        type: Array,
+        value: [1,2,3]
+      },
+      channelB:{
+        type: Array,
+        value: [1,2,3]
+      },
+      channelC:{
+        type: Array,
+        value: [1,2,3]
+      },
+      url2: {
+        type: String,
+        value: "https://cowardly-seahorse-94.localtunnel.me/data"
+      },
       cA: {
         type: String,
         value: "Go!"
@@ -104,10 +142,40 @@ class GameSenseApp extends PolymerElement {
       }
     };
   }
+  connectedCallback(){
+    super.connectedCallback();
+    
+    setInterval(() => {
+      if (this.darwi)
+      this.$.ajax.generateRequest();
+        
+    }, 3000);
+  }
+  _handleResponse(event){
+    this.channelA = []
+    this.channelC = []
+    this.channelB = []
+    var auxA = []
+    var auxB = []
+    var auxC = []
+    var data_ = JSON.parse(event.detail.response);
+    //console.log(data_['0'])
+    for (const key in data_) {
+      if (data_.hasOwnProperty(key)) {
+        auxA.push(data_[key][0]);
+        auxB.push(data_[key][1]);
+        auxC.push(data_[key][2]);
+      }
+    }/**/
+    this.channelA = auxA;
+    this.channelB = auxB;
+    this.channelC = auxC;
+  }
   _selectAnswer(event) {
     let clickedButton = event.target;
     this.userAnswer = clickedButton.textContent;
     if (this.$.Gname.value != '' && this.$.Gage.value != '') {
+      this.darwi = true;
       this.outpuName = this.$.Gname.value;
       this.outputAge = this.$.Gage.value;
       this.outputHi = this.$.Ghi.value;
@@ -124,7 +192,7 @@ class GameSenseApp extends PolymerElement {
           'Content-Type': 'application/json'
         }
       }).then(res => res)
-      .catch(error => console.error('Error:', error))
+      .catch(error => error)
       .then(response => console.log('Success:', response));
     }else{
       Swal.fire({
@@ -147,10 +215,13 @@ class GameSenseApp extends PolymerElement {
     this.$.Gage.value = '';
     this.$.Gwork.hidden = true;
     this.$.log.hidden = false;
+    this.darwi = false;
   }
   _handleAjaxPostError(event){
     console.log(event)
   }
 }
+
+
 
 window.customElements.define('game-sense-app', GameSenseApp);

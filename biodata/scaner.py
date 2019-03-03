@@ -11,8 +11,8 @@ running_time = 10
     
 batteryThreshold = 60
 acqChannels = [0, 2, 4]
-samplingRate = 1000
-nSamples = 100
+samplingRate = 100
+nSamples = 10
 digitalOutput = [1,1]
 while True:
     try:
