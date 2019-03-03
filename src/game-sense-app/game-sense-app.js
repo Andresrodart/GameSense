@@ -24,7 +24,7 @@ class GameSenseApp extends PolymerElement {
       <app-header-layout class="bimg">
         <app-header reveals effects="waterfall" slot="header">
           <app-toolbar class="toolbar red">
-            <div main-title class="center Gamerinfo">Game Sense</div>
+            <div main-title class="center Gamerinfo">GAME SENSE</div>
           </app-toolbar>
         </app-header>
         
@@ -49,7 +49,7 @@ class GameSenseApp extends PolymerElement {
           <div class="board">
               <div class="row">
                 <div class="column_2">
-                  <div id="flag-image-container" class="padd">
+                  <div id="flag-image-container" class="padd center">
                       <iron-image sizing="contain" fade src="[[cImg]]" id="gImage"></iron-image>
                   </div>
                 </div>
@@ -62,7 +62,7 @@ class GameSenseApp extends PolymerElement {
                   </div>
                 </div>
               </div>  
-              <div id="timer" class="">
+              <div id="timer" class="center">
                 <vaadin-chart type="area" title="What A gamer A Gamer feel" categories="[[categories]]" stacking="normal" no-legend tooltip>
                   <vaadin-chart-series title="Channel A" values="[[channelA]]" unit="Houndreds">
                   </vaadin-chart-series>
@@ -99,19 +99,19 @@ class GameSenseApp extends PolymerElement {
       },
       channelA:{
         type: Array,
-        value: [1,2,3]
+        value: []
       },
       channelB:{
         type: Array,
-        value: [1,2,3]
+        value: []
       },
       channelC:{
         type: Array,
-        value: [1,2,3]
+        value: []
       },
       url2: {
         type: String,
-        value: "https://cowardly-seahorse-94.localtunnel.me/data"
+        value: "https://nervous-earwig-11.localtunnel.me/data"
       },
       cA: {
         type: String,
