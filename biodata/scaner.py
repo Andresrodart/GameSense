@@ -53,5 +53,5 @@ while True:
             
         # Close connection
     except:
-        pass
+        print("Error in connection")
 device.close()
