@@ -43,7 +43,7 @@ while True:
             #print(, end='\n\n')
             end = time.time()
         final_dict={"data":dict_}
-        with open('result.json', 'w') as fp:
+        with open('result.json', 'w+') as fp:
             json.dump(final_dict, fp)
         # Turn BITalino led on
         device.trigger(digitalOutput)
@@ -52,6 +52,7 @@ while True:
         device.stop()
             
         # Close connection
+        device.close()
+
     except:
         print("Error in connection")
-device.close()
