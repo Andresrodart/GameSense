@@ -16,7 +16,7 @@ nSamples = 100
 digitalOutput = [1,1]
 while True:
     try:
-        # Connect to BITalino
+# Connect to BITalino
         device = BITalino(macAddress)
 
         # Set battery threshold
@@ -38,9 +38,11 @@ while True:
             arr_channels = device.read(nSamples)
             sam_1 = random.randint(0,99)
             sam_2 = random.randint(0,99)
-            dict_['' + coun] = [arr_channels[sam_1][4],arr_channels[sam_1][5], arr_channels[sam_1][6] ]
-            dict_['' + coun] = [arr_channels[sam_2][4],arr_channels[sam_2][5], arr_channels[sam_2][6] ]
-            #print(, end='\n\n')
+            dict_[str(coun)] = [arr_channels[sam_1][4],arr_channels[sam_1][5], arr_channels[sam_1][6] ]
+            coun += 1
+            dict_[str(coun)] = [arr_channels[sam_2][4],arr_channels[sam_2][5], arr_channels[sam_2][6] ]
+            coun += 1
+            print(arr_channels, end='\n\n')
             end = time.time()
         final_dict={"data":dict_}
         with open('result.json', 'w+') as fp:
