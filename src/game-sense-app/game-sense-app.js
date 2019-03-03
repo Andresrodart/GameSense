@@ -33,10 +33,10 @@ class GameSenseApp extends PolymerElement {
                 <div id="flag-image-container">
                     <iron-image sizing="contain" fade src="[[cImg]]" id="theImg"></iron-image>
                         <div id="answer-button-container">
-                            <paper-input always-float-label label="Gamer" id="Gname"></paper-input>
-                            <paper-input always-float-label label="Edad"  id="Gage" type="number"></paper-input>
-                            <paper-input always-float-label label="Estatura"  id="Ghi" type="number" step="0.01"></paper-input>
-                            <paper-input always-float-label label="Peso"  id="Gwe" type="number" step="0.01" placeholder="70.00"></paper-input>
+                            <paper-input always-float-label label="Gamer" id="Gname" placeholder="Remedeios"></paper-input>
+                            <paper-input always-float-label label="Edad"  id="Gage" type="number" placeholder="42"></paper-input>
+                            <paper-input always-float-label label="Estatura"  id="Ghi" type="number" step="0.01" placeholder="1.77 mts"></paper-input>
+                            <paper-input always-float-label label="Peso"  id="Gwe" type="number" step="0.01" placeholder="70.00 Kg"></paper-input>
                             <paper-button id="optionA" class="answer" on-click="_selectAnswer">[[cA]]</paper-button>
                         </div>
                     <paper-button class="another" id="another" on-click="_changeImage">[[cB]]</paper-button> 
@@ -46,35 +46,38 @@ class GameSenseApp extends PolymerElement {
           <br>
           <br>
         <div class="padd" hidden="true" id="Gwork">
-          <div class="board">
+            <div class="board">
               <div class="row">
-                <div class="column_2">
-                  <div id="flag-image-container" class="padd center">
-                      <iron-image sizing="contain" fade src="[[cImg]]" id="gImage"></iron-image>
+                  <div class="column_2">
+                      <div id="flag-image-container" class="padd center">
+                        <iron-image sizing="contain" fade src="[[cImg]]" id="gImage"></iron-image>
+                      </div>
                   </div>
-                </div>
-                <div class="column_2 verSyn Gamerinfo">
-                  <div class="">
-                      <br>
-                      <div id="Gamer">Nombre: [[outpuName]]</div>
-                      <br>
-                      <div id="Age">Edad: [[outputAge]]</div>
+                  <div class="column_2 verSyn Gamerinfo">
+                        <br>
+                        <div id="Gamer">Nombre: [[outpuName]]</div>
+                        <br>
+                        <div id="Age">Edad: [[outputAge]]</div>
+                        <br>
+                        <div id="Age">IMC: [[IMC]]</div>
                   </div>
-                </div>
-              </div>  
-              <div id="timer" class="center">
-                <vaadin-chart type="area" title="What A gamer A Gamer feel" categories="[[categories]]" stacking="normal" no-legend tooltip>
-                  <vaadin-chart-series title="Channel A" values="[[channelA]]" unit="Houndreds">
-                  </vaadin-chart-series>
-                  <vaadin-chart-series title="Channel B" values="[[channelB]]" unit="Houndreds">
-                  </vaadin-chart-series>
-                  <vaadin-chart-series title="Channel C" values="[[channelC]]" unit="Houndreds">
-                  </vaadin-chart-series>
-                </vaadin-chart>
+              </div>
+              <br>
+              <div class=">
+                  <div id="timer" class="">
+                      <vaadin-chart type="area" title="What A gamer A Gamer feel" categories="[[categories]]" stacking="normal" no-legend tooltip>
+                          <vaadin-chart-series title="Channel A" values="[[channelA]]" unit="Houndreds">
+                          </vaadin-chart-series>
+                          <vaadin-chart-series title="Channel B" values="[[channelB]]" unit="Houndreds">
+                          </vaadin-chart-series>
+                          <vaadin-chart-series title="Channel C" values="[[channelC]]" unit="Houndreds">
+                          </vaadin-chart-series>
+                      </vaadin-chart>
+                  </div>
+                  <br>
+                  <paper-button class="another" id="another" on-click="_exit" ><h2>Exit</h2></paper-button> 
+              </div>
             </div>
-            <br>
-            <paper-button class="another" id="another" on-click="_exit" >Exit</paper-button> 
-          </div>
         </div>
         <iron-ajax
           id="ajax"
@@ -92,6 +95,10 @@ class GameSenseApp extends PolymerElement {
       darwi:{
         type: Boolean,
         value: false
+      },
+      IMC:{
+        type: String,
+        value: "_"
       },
       categories:{
         type: Array,
@@ -149,7 +156,7 @@ class GameSenseApp extends PolymerElement {
       if (this.darwi)
       this.$.ajax.generateRequest();
         
-    }, 3000);
+    }, 1000);
   }
   _handleResponse(event){
     this.channelA = []
@@ -159,14 +166,13 @@ class GameSenseApp extends PolymerElement {
     var auxB = []
     var auxC = []
     var data_ = JSON.parse(event.detail.response);
-    //console.log(data_['0'])
     for (const key in data_) {
       if (data_.hasOwnProperty(key)) {
         auxA.push(data_[key][0]);
         auxB.push(data_[key][1]);
         auxC.push(data_[key][2]);
       }
-    }/**/
+    }
     this.channelA = auxA;
     this.channelB = auxB;
     this.channelC = auxC;
@@ -176,6 +182,15 @@ class GameSenseApp extends PolymerElement {
     this.userAnswer = clickedButton.textContent;
     if (this.$.Gname.value != '' && this.$.Gage.value != '') {
       this.darwi = true;
+      var aux = parseFloat(this.$.Gwe.value);
+      aux = aux / Math.pow(parseFloat(this.$.Ghi.value), 2);
+      if (aux > 25)
+        this.IMC = 'Jugador con sobrepeso';
+      else if(aux < 22)
+        this.IMC = 'Jugador con bajo peso';
+      else
+        this.IMC = 'Jugador con peso ideal';
+      console.log(aux)
       this.outpuName = this.$.Gname.value;
       this.outputAge = this.$.Gage.value;
       this.outputHi = this.$.Ghi.value;
@@ -184,7 +199,7 @@ class GameSenseApp extends PolymerElement {
       this.$.Gwork.hidden = false;
       var data = {"name":this.outpuName, "Age":this.outputAge, "Hi":this.outputHi, "We":this.outputWe}
       fetch(url, {
-        method: 'POST', // or 'PUT'
+        method: 'POST',
         body: JSON.stringify(data),
         headers:{
           'Access-Control-Allow-Origin':'*',
@@ -202,7 +217,6 @@ class GameSenseApp extends PolymerElement {
       confirmButtonText: 'Cool'
       });
     }
-    //this.$.mein.style.padding = "";
   }
   _changeImage(event) {
     this.cImg = (imgs.indexOf(this.cImg) + 2 > imgs.length)? imgs[0] : imgs[imgs.indexOf(this.cImg) + 1]

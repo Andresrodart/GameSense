@@ -111,11 +111,7 @@
     transform: translate(-50%, -50%);
   }
   /* Clear floats after the columns */
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+ 
 
   .Gamerinfo{
       font-size: 3ch;
