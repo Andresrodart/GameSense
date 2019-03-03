@@ -8,6 +8,8 @@
     "@polymer/paper-button": "^3.0.1",
     "@polymer/paper-input": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.13",
     "mongodb-stitch-browser-sdk": "^4.3.0",
     "mongoose": "^5.4.16",
     "sweetalert2": "^8.2.6"

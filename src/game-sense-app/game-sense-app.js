@@ -3,6 +3,9 @@ import '@polymer/iron-image/iron-image.js';
 import '@polymer/app-layout/app-layout.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/iron-ajax/iron-ajax.js';
+var url = 'http://127.0.0.1:3000';
+
 /**
  * @customElement
  * @polymer
@@ -31,7 +34,7 @@ class GameSenseApp extends PolymerElement {
                             <paper-input always-float-label label="Gamer" id="Gname"></paper-input>
                             <paper-input always-float-label label="Edad"  id="Gage" type="number"></paper-input>
                             <paper-input always-float-label label="Estatura"  id="Ghi" type="number" step="0.01"></paper-input>
-                            <paper-input always-float-label label="Peso"  id="Ghi" type="number" step="0.01" placeholder="70.00"></paper-input>
+                            <paper-input always-float-label label="Peso"  id="Gwe" type="number" step="0.01" placeholder="70.00"></paper-input>
                             <paper-button id="optionA" class="answer" on-click="_selectAnswer">[[cA]]</paper-button>
                         </div>
                     <paper-button class="another" id="another" on-click="_changeImage">[[cB]]</paper-button> 
@@ -51,9 +54,9 @@ class GameSenseApp extends PolymerElement {
                 <div class="column_2 verSyn Gamerinfo">
                   <div class="">
                       <br>
-                      <div id="Gamer">[[outpuName]]</div>
+                      <div id="Gamer">Nombre: [[outpuName]]</div>
                       <br>
-                      <div id="Age">[[outputAge]]</div>
+                      <div id="Age">Edad: [[outputAge]]</div>
                   </div>
                 </div>
               </div>  
@@ -65,6 +68,15 @@ class GameSenseApp extends PolymerElement {
             <paper-button class="another" id="another" on-click="_exit" >Exit</paper-button> 
           </div>
         </div>
+        <iron-ajax
+          id="AjaxPost"
+          url="http://127.0.0.1:3000"
+          method="POST"
+          content-type="application/json"
+          handle-as="json"
+          on-response="_handleAjaxPostResponse"
+          on-error="_handleAjaxPostError"
+        ></iron-ajax>
       </app-header-layout>
     
     `;
@@ -84,11 +96,19 @@ class GameSenseApp extends PolymerElement {
       },
       outpuName: {
         type: String,
-        value: "Nombre: "
+        value: ""
       },
       outputAge: {
         type: String,
-        value: "Edad: "
+        value: ""
+      },
+      outputHi: {
+        type: String,
+        value: ""
+      },
+      outputWe: {
+        type: String,
+        value: ""
       }
     };
   }
@@ -96,17 +116,32 @@ class GameSenseApp extends PolymerElement {
     let clickedButton = event.target;
     this.userAnswer = clickedButton.textContent;
     if (this.$.Gname.value != '' && this.$.Gage.value != '') {
-      this.outpuName += this.$.Gname.value;
-      this.outputAge += this.$.Gage.value;
+      this.outpuName = this.$.Gname.value;
+      this.outputAge = this.$.Gage.value;
+      this.outputHi = this.$.Ghi.value;
+      this.outputWe = this.$.Gwe.value;
       this.$.log.hidden = true;
       this.$.Gwork.hidden = false;
+      var data = {name:this.outpuName, Age:this.outputAge, Hi:this.outputHi, We:this.outputWe}
+      fetch(url, {
+        mode: 'no cors',
+        method: 'POST', // or 'PUT'
+        body: JSON.stringify(data),
+        headers:{
+          'Access-Control-Allow-Origin':'*',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res)
+      .catch(error => console.error('Error:', error))
+      .then(response => console.log('Success:', response));
     }else{
       Swal.fire({
       title: 'Error!',
       text: 'Campos vacios',
       type: 'error',
       confirmButtonText: 'Cool'
-      })
+      });
     }
     //this.$.mein.style.padding = "";
   }
@@ -121,6 +156,9 @@ class GameSenseApp extends PolymerElement {
     this.$.Gage.value = '';
     this.$.Gwork.hidden = true;
     this.$.log.hidden = false;
+  }
+  _handleAjaxPostError(event){
+    console.log(event)
   }
 }
 
