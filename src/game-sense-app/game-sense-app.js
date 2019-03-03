@@ -4,7 +4,7 @@ import '@polymer/app-layout/app-layout.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-ajax/iron-ajax.js';
-var url = 'http://127.0.0.1:3000';
+var url = 'http://localhost:3000/users';
 
 /**
  * @customElement
@@ -68,15 +68,7 @@ class GameSenseApp extends PolymerElement {
             <paper-button class="another" id="another" on-click="_exit" >Exit</paper-button> 
           </div>
         </div>
-        <iron-ajax
-          id="AjaxPost"
-          url="http://127.0.0.1:3000"
-          method="POST"
-          content-type="application/json"
-          handle-as="json"
-          on-response="_handleAjaxPostResponse"
-          on-error="_handleAjaxPostError"
-        ></iron-ajax>
+       
       </app-header-layout>
     
     `;
@@ -122,9 +114,8 @@ class GameSenseApp extends PolymerElement {
       this.outputWe = this.$.Gwe.value;
       this.$.log.hidden = true;
       this.$.Gwork.hidden = false;
-      var data = {name:this.outpuName, Age:this.outputAge, Hi:this.outputHi, We:this.outputWe}
+      var data = {"name":this.outpuName, "Age":this.outputAge, "Hi":this.outputHi, "We":this.outputWe}
       fetch(url, {
-        mode: 'no cors',
         method: 'POST', // or 'PUT'
         body: JSON.stringify(data),
         headers:{
