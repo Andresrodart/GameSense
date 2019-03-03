@@ -7,12 +7,12 @@ import json
 macAddress = "20:16:02:26:60:31"
 
 # This example will collect data for 5 sec.
-running_time = 10
+running_time = 100
     
 batteryThreshold = 60
 acqChannels = [0, 2, 4]
-samplingRate = 100
-nSamples = 10
+samplingRate = 1000
+nSamples = 100
 digitalOutput = [1,1]
 while True:
     try:
